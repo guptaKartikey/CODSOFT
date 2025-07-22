@@ -1,0 +1,75 @@
+
+   body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom right, #f0f4ff, #e0e7ff);
+  text-align: center;
+  padding: 20px;
+  margin: 0;
+}
+
+h1 {
+  color: #222;
+  margin-bottom: 10px;
+  font-size: 32px;
+  letter-spacing: 1px;
+}
+
+p {
+  color: #555;
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-template-rows: repeat(3, 100px);
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.cell {
+  background-color: #fff;
+  border: 2px solid #555;
+  font-size: 40px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.1s;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.cell:hover {
+  background-color: #f1f5ff;
+  transform: scale(1.05);
+}
+
+.status {
+  font-size: 22px;
+  color: #007bff;
+  margin-top: 20px;
+  font-weight: 600;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 26px;
+  border: none;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tic-Tac-Toe AI</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="index.css">
+
+</head>
+<body>
+
+  <h1>Welcome to Tic-Tac-Toe Game</h1>
+  <p>This is a classic game of Human vs AI (Unbeatable with Minimax)</p>
+
+  <div class="board" id="board"></div>
+
+  <div class="status" id="status"></div>
+  <button onclick="restartGame()">Restart Game</button>
+
+  <script>
+    const HUMAN = 'X';
+    const AI = 'O';
+    let board = Array(9).fill('');
+    const boardDiv = document.getElementById('board');
+    const statusDiv = document.getElementById('status');
+
+    function createBoard() {
+      boardDiv.innerHTML = '';
+      board.forEach((cell, idx) => {
+        const cellDiv = document.createElement('div');
+        cellDiv.classList.add('cell');
+        cellDiv.dataset.index = idx;
+        cellDiv.textContent = cell;
+        cellDiv.addEventListener('click', () => handleClick(idx));
+        boardDiv.appendChild(cellDiv);
+      });
+    }
+
+    function handleClick(idx) {
+      if (board[idx] !== '' || isGameOver(board)) return;
+      board[idx] = HUMAN;
+      createBoard();
+      if (checkWinner(board, HUMAN)) {
+        statusDiv.textContent = '🎉 You Win!';
+        return;
+      }
+      if (isDraw(board)) {
+        statusDiv.textContent = '🤝 It\'s a Draw!';
+        return;
+      }
+      setTimeout(() => {
+        const best = bestMove();
+        board[best] = AI;
+        createBoard();
+        if (checkWinner(board, AI)) {
+          statusDiv.textContent = '💻 AI Wins!';
+        } else if (isDraw(board)) {
+          statusDiv.textContent = '🤝 It\'s a Draw!';
+        }
+      }, 300);
+    }
+
+    function checkWinner(b, player) {
+      const winPatterns = [
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
+      ];
+      return winPatterns.some(pattern =>
+        pattern.every(i => b[i] === player)
+      );
+    }
+
+    function isDraw(b) {
+      return b.every(cell => cell !== '');
+    }
+
+    function isGameOver(b) {
+      return checkWinner(b, HUMAN) || checkWinner(b, AI) || isDraw(b);
+    }
+
+    function bestMove() {
+      let bestScore = -Infinity;
+      let move;
+      for (let i = 0; i < 9; i++) {
+        if (board[i] === '') {
+          board[i] = AI;
+          let score = minimax(board, 0, false);
+          board[i] = '';
+          if (score > bestScore) {
+            bestScore = score;
+            move = i;
+          }
+        }
+      }
+      return move;
+    }
+
+    function minimax(b, depth, isMaximizing) {
+      if (checkWinner(b, AI)) return 10 - depth;
+      if (checkWinner(b, HUMAN)) return depth - 10;
+      if (isDraw(b)) return 0;
+
+      if (isMaximizing) {
+        let best = -Infinity;
+        for (let i = 0; i < 9; i++) {
+          if (b[i] === '') {
+            b[i] = AI;
+            let score = minimax(b, depth + 1, false);
+            b[i] = '';
+            best = Math.max(score, best);
+          }
+        }
+        return best;
+      } else {
+        let best = Infinity;
+        for (let i = 0; i < 9; i++) {
+          if (b[i] === '') {
+            b[i] = HUMAN;
+            let score = minimax(b, depth + 1, true);
+            b[i] = '';
+            best = Math.min(score, best);
+          }
+        }
+        return best;
+      }
+    }
+
+    function restartGame() {
+      board = Array(9).fill('');
+      statusDiv.textContent = '';
+      createBoard();
+    }
+
+    createBoard();
+  </script>
+
+</body>
+</html>
